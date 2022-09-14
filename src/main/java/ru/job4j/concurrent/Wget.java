@@ -27,8 +27,8 @@ public class Wget implements Runnable {
             long start = System.currentTimeMillis();
             while ((countByte = in.read(dataBuffer, 0, 1024)) != -1) {
                 downloadBytes += countByte;
-                long end = System.currentTimeMillis();
                 if (downloadBytes >= speed) {
+                    long end = System.currentTimeMillis();
                     long fact = end - start;
                     if (fact < SEC) {
                         try {
@@ -36,6 +36,8 @@ public class Wget implements Runnable {
                         } catch (InterruptedException e) {
                             Thread.currentThread().interrupt();
                         }
+                        start = System.currentTimeMillis();
+                        downloadBytes = 0;
                     }
                 }
                 out.write(dataBuffer, 0, countByte);
