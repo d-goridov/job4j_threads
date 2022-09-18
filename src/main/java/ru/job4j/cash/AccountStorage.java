@@ -18,8 +18,7 @@ public class AccountStorage {
     }
 
     public  synchronized boolean update(Account account) {
-        return accounts.computeIfPresent(account.id(),
-                (k, v) -> new Account(account.id(), account.amount())) != null;
+        return accounts.replace(account.id(), account) != null;
 
     }
 
@@ -33,11 +32,13 @@ public class AccountStorage {
     }
 
     public synchronized boolean transfer(int fromId, int toId, int amount) {
-        if ((getById(fromId).isEmpty() && getById(toId).isEmpty()) || getById(fromId).get().amount() < amount) {
+        Optional<Account> sender = getById(fromId);
+        Optional<Account> recipient = getById(toId);
+        if ((sender.isEmpty() || recipient.isEmpty()) || sender.get().amount() < amount) {
             return false;
         }
-        Account fromNew = new Account(fromId, getById(fromId).get().amount() - amount);
-        Account toNew = new Account(toId, getById(toId).get().amount() + amount);
+        Account fromNew = new Account(fromId, sender.get().amount() - amount);
+        Account toNew = new Account(toId, recipient.get().amount() + amount);
         return update(fromNew) && update(toNew);
     }
 }

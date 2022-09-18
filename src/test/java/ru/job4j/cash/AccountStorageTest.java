@@ -62,4 +62,12 @@ class AccountStorageTest {
         storage.add(new Account(2, 100));
         assertThat(storage.transfer(3, 4, 20)).isFalse();
     }
+
+    @Test
+    void whenWrongTransferDoesNotOneExistAccount() {
+        var storage = new AccountStorage();
+        storage.add(new Account(1, 50));
+        storage.add(new Account(2, 100));
+        assertThat(storage.transfer(1, 3, 40)).isFalse();
+    }
 }
