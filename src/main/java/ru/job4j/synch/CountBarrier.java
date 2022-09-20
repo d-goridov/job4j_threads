@@ -19,9 +19,7 @@ public class CountBarrier {
 
     public synchronized void count() {
         synchronized (monitor) {
-            while (count < total) {
-                count++;
-            }
+            count++;
             notifyAll();
         }
     }
