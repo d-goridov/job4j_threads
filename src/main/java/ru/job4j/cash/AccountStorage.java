@@ -32,13 +32,13 @@ public class AccountStorage {
     }
 
     public synchronized boolean transfer(int fromId, int toId, int amount) {
-        Optional<Account> sender = getById(fromId);
-        Optional<Account> recipient = getById(toId);
-        if ((sender.isEmpty() || recipient.isEmpty()) || sender.get().amount() < amount) {
-            return false;
+        boolean rsl = false;
+        Optional<Account> fromAc = getById(fromId);
+        Optional<Account> toAc = getById(toId);
+        if (fromAc.isPresent() && toAc.isPresent() && fromAc.get().amount() >= amount) {
+            rsl = update(new Account(fromId, fromAc.get().amount() - amount))
+                    && update(new Account(toId, toAc.get().amount() + amount));
         }
-        Account fromNew = new Account(fromId, sender.get().amount() - amount);
-        Account toNew = new Account(toId, recipient.get().amount() + amount);
-        return update(fromNew) && update(toNew);
+        return rsl;
     }
 }
