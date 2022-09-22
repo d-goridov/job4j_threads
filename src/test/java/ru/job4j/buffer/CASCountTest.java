@@ -27,6 +27,6 @@ public class CASCountTest {
 
         thread1.join();
         thread2.join();
-        assertThat(ref.get(), is (400));
+        assertThat(ref.get(), is(400));
     }
 }
