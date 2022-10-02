@@ -5,11 +5,8 @@ import java.util.concurrent.Executors;
 
 public class EmailNotification {
 
-    private ExecutorService pool;
+    private final ExecutorService pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-    public EmailNotification() {
-        pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-    }
 
     public void emailTo(User user) {
         pool.execute(() -> {
