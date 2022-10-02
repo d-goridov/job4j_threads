@@ -31,4 +31,13 @@ class CacheTest {
         assertThat(cache.update(base)).isTrue();
         assertThat(cache.get(1)).isEqualTo(new Base(1, 2));
     }
+
+    @Test
+    public void whenNotUpdate() {
+        Cache cache = new Cache();
+        Base base = new Base(1, 1);
+        cache.add(base);
+        assertThatThrownBy(() -> cache.update(new Base(1, 2)))
+                .isInstanceOf(OptimisticException.class);
+    }
 }
