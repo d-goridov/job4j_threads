@@ -15,7 +15,6 @@ public class EmailNotification {
             String body = String.format("Add a new event to %s", user.getUsername());
             send(subject, body, user.getEmail());
         });
-        close();
     }
 
     public void send(String subject, String body, String email) {
