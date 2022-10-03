@@ -30,12 +30,12 @@ public class SearchIndex<T> extends RecursiveTask<Integer> {
         rightSearch.fork();
         int left = leftSearch.join();
         int right = rightSearch.join();
-        return left > right ? left : right;
+        return Math.max(left, right);
     }
 
     private int findIndex() {
         int rsl = -1;
-        for (int i = 0; i < array.length; i++) {
+        for (int i = indexFrom; i <= indexTo; i++) {
             if (array[i].equals(target)) {
                 rsl = i;
                 break;
@@ -44,15 +44,8 @@ public class SearchIndex<T> extends RecursiveTask<Integer> {
         return rsl;
     }
 
-    public static void main(String[] args) {
+    public static <T> Integer search(T[] array, T target) {
         ForkJoinPool forkJoinPool = new ForkJoinPool();
-        Integer[] integers = {133, 543, 3, 43, 456, 987, 21, 32, 32, 55, 6, 8, 0, 54};
-        Integer rsl = forkJoinPool.invoke(new SearchIndex<>(integers, 0, integers.length - 1, 32));
-        System.out.println(rsl);
-
-        String[] strings = {"Oleg", "Igor", "Maria", "Alexey", "Misha", "Nikolay", "Dmitriy",
-                           "Gennadiy", "Fedor", "Dasha", "Boris", "Sasha"};
-        Integer res = forkJoinPool.invoke(new SearchIndex<>(strings, 0, strings.length - 1, "Fedor"));
-        System.out.println(res);
+        return forkJoinPool.invoke(new SearchIndex<>(array, 0, array.length - 1, target));
     }
 }
